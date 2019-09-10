@@ -14,6 +14,7 @@ app.use(bodyparser.urlencoded({
 app.use(cors())
 
 var Users = require('./routes/users')
+var Players = require('./routes/players')
 
 app.use((res, req, next) => {
     return next();
@@ -22,6 +23,7 @@ app.use((res, req, next) => {
 app.use(Router);
 
 app.use('/users', Users)
+app.use('/players', Players)
 
 app.use(function (req, res, next) {
     res.status(404).send({

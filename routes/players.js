@@ -15,7 +15,7 @@ const isPlayerExist = (name) => {
 
 const createPlayer = (req) => {
   return new Promise((resolve, reject) => {
-    db.sequelize.query(`INSERT INTO user (playerId, name, age, country) VALUES ('${req.body.playerId}', '${req.body.name}', '${req.body.age}', '${req.body.country}')`)
+    db.sequelize.query(`INSERT INTO player (playerId, name, age, country) VALUES ('${req.body.playerId}', '${req.body.name}', '${req.body.age}', '${req.body.country}')`)
       .then((result, err) => {
         if (err) { reject(err); }
         else { resolve(result) }
@@ -24,8 +24,8 @@ const createPlayer = (req) => {
   })
 }
 
-//PlayersCheck
-player.post('/playersInfo', (req, res, next) => {
+// players check
+player.post('/add', (req, res, next) => {
   isPlayerExist(req)
     .then(result => {
       if (result[0].length > 0) {
@@ -42,7 +42,7 @@ player.post('/playersInfo', (req, res, next) => {
           .catch(err => {
             res.status(401).send({
               message: 'ERROR!'
-            })
+            })       
           })
       }
     })
@@ -50,5 +50,10 @@ player.post('/playersInfo', (req, res, next) => {
       res.status(404).send({ message: 'error' })
     })
 })
+
+// To do
+// 1- get or post api which takes no value in req and returns only name and age of all players
+// 2- get or post api which takes id in req and returns all attribute of particular player whose id matches with id recieved in req
+
 
 module.exports = player
