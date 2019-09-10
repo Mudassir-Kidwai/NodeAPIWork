@@ -13,7 +13,7 @@ app.use(bodyparser.urlencoded({
 }))
 app.use(cors())
 
-var Users = require('./routes/Users')
+var Users = require('./routes/users')
 
 app.use((res, req, next) => {
     return next();
