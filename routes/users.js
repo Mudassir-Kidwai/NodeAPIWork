@@ -40,17 +40,21 @@ const createUser = (req) => {
 users.post('/login', (req, res, next) => {
   isUser(req)
     .then(result => {
-      res.status(202).send({ message: 'WELCOME!!' })
+      if (result[0].length > 0) {
+        res.status(202).send({ message: 'WELCOME!!' })
+      } else {
+        res.status(404).send({ message: 'Please sign up!' })
+      }
     })
     .catch(err => {
-      res.status(404).send({ message: 'Please sign up!' })
+      res.status(404).send({ message: 'error' })
     })
 })
 
 //Login User Check 
-const isUser = (email, password) => {
+const isUser = (req) => {
   return new Promise((resolve, reject) => {
-    db.sequelize.query(`select * from user where email='${email}' AND password='${password}'`)
+    db.sequelize.query(`select * from user where email='${req.body.email}' AND password='${req.body.password}'`)
       .then((result, err) => {
         if (err) { reject(err) }
         else { resolve(result) }
