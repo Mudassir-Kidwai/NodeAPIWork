@@ -35,9 +35,10 @@ const createUser = (req) => {
       })
   })
 }
+//put (edit) Edit the profile patch overwrute, 
 
 //login API
-users.post('/login', (req, res, next) => {
+users.get('/login', (req, res, next) => {
   isUser(req)
     .then(result => {
       if (result[0].length > 0) {
@@ -54,7 +55,7 @@ users.post('/login', (req, res, next) => {
 //Login User Check 
 const isUser = (req) => {
   return new Promise((resolve, reject) => {
-    db.sequelize.query(`select * from user where email='${req.body.email}' AND password='${req.body.password}'`)
+    db.sequelize.query(`select * from user where email='${req.query.email}' AND password='${req.query.password}'`)
       .then((result, err) => {
         if (err) { reject(err) }
         else { resolve(result) }

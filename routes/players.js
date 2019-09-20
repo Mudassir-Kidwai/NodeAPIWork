@@ -54,6 +54,63 @@ player.post('/add', (req, res, next) => {
 // To do
 // 1- get or post api which takes no value in req and returns only name and age of all players
 // 2- get or post api which takes id in req and returns all attribute of particular player whose id matches with id recieved in req
+// edit, delete
 
+//Players selected info
+player.post('/getPlayers', (req, res, next) => {
+  isUserPlayer(req)
+    .then(result => {
+      if (result[0].length > 0) {
+        res.status(202).send({ message: 'SHOWING DATA' })
+        //Some printing of data
+      } else {
+        res.status(404).send({ message: 'This player is not in our list!' })
+      }
+    })
+    .catch(err => {
+      res.status(404).send({ message: 'error' })
+    })
+})
+
+//Selected player info..
+const isUserPlayer = (req) => {
+  return new Promise((resolve, reject) => {
+    db.sequelize.query(`select name, age from player where name='${req.body.name}' AND age='${req.body.age}'`)
+      .then((result, err) => {
+        if (err) { reject(err) }
+        else { resolve(result) }
+      })
+      .catch(err => { reject(err) })
+  })
+}
+
+//Players Complete info..
+player.post('/getPlayersWithId', (req, res, next) => {
+  isUserCheck(req)
+    .then(result => {
+      if (result[0].length > 0) {
+        res.status(202).send({ message: 'Player complete info!!' })
+        //Player info name, age, country
+      } 
+      else {
+        res.status(404).send({ message: 'Please sign up!' })
+      }
+    })
+    .catch(err => {
+      res.status(404).send({ message: 'error' })
+    })
+})
+
+//Selected player info with condition..
+const isUserCheck = (req) => {
+  return new Promise((resolve, reject) => {
+    db.sequelize.query(`select * from player where playerID='${req.body.playerId}'`)
+      .then((result, err) => {
+        if (err) { reject(err) }
+        else { resolve(result) }
+      })
+      .catch(err => { reject(err) })
+  })
+}
 
 module.exports = player
